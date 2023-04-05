@@ -59,11 +59,14 @@ namespace TGC.MonoGame.TP
             // Seria hasta aca.
 
             // Configuramos nuestras matrices de la escena.
+            //Vector3 vector= new Vector3(1f,0f,2f);
+            //Vector3.UnitZ -> me devuelve un vector (0f,0f,1f)
+
             World = Matrix.Identity;
             View = Matrix.CreateLookAt(Vector3.UnitZ * 150, Vector3.Zero, Vector3.Up);
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
-
+            //PiOver4 (medida mas comun para el angulo de apertura del frostum). AspectRatio dado por Monogame 
             base.Initialize();
         }
 
@@ -116,6 +119,8 @@ namespace TGC.MonoGame.TP
 
             // Basado en el tiempo que paso se va generando una rotacion.
             Rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+            //gameTime.ElapsedGameTime.TotalSeconds: tiempo en seg que paso desde que se inicio la app
+
 
             base.Update(gameTime);
         }
