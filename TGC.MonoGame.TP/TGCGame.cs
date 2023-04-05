@@ -59,8 +59,8 @@ namespace TGC.MonoGame.TP
             // Seria hasta aca.
 
             // Configuramos nuestras matrices de la escena.
-            //Vector3 vector= new Vector3(1f,0f,2f);
-            //Vector3.UnitZ -> me devuelve un vector (0f,0f,1f)
+            //Vector3 vector= new Vector3(1f,0f,2f);    Crea un vector en R3
+            //Vector3.UnitZ -> me devuelve un vector (0f,0f,1f)     vector unitario en Z
 
             World = Matrix.Identity;
             View = Matrix.CreateLookAt(Vector3.UnitZ * 150, Vector3.Zero, Vector3.Up);
@@ -108,7 +108,8 @@ namespace TGC.MonoGame.TP
         /// </summary>
 
          float yPosition=0f;
-
+         float xPosition=0f;
+         float scale=1f;
         protected override void Update(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de actualizacion del juego.
@@ -120,20 +121,38 @@ namespace TGC.MonoGame.TP
                 Exit();
             }
 
-            else if(Keyboard.GetState().IsKeyDown(Keys.W))
-                yPosition = MathF.Cos(Convert.ToSingle(gameTime.TotalSeconds.TotalSeconds));
-            // Basado en el tiempo que paso se va generando una rotacion.
-            //gameTime.ElapsedGameTime.TotalSeconds: tiempo en seg que paso desde que se inicio la app
+            /*gameTime.ElapsedGameTime.TotalSeconds: 
+                    tiempo en seg que paso desde el ultimo UPDATE. En general el tiempo es siempre el mismo y varia de maquina en maquina
+              gameTime.TotalGameTime.TotalSeconds: 
+                    tiempo en seg desde que se inicio el juego. Se va incrementando.
+            */
+            if(Keyboard.GetState().IsKeyDown(Keys.W))
+                yPosition += 10* Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);     //Convert.ToSingle(double): convierte a float
+                       
             if(Keyboard.GetState().IsKeyDown(Keys.S))
-                Rotation -= 5* Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+                yPosition -= 10* Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
+            if(Keyboard.GetState().IsKeyDown(Keys.D))
+                xPosition = MathF.Cos(Convert.ToSingle(gameTime.TotalGameTime.TotalSeconds))*100;            
+
+            if(Keyboard.GetState().IsKeyDown(Keys.A))
+                 xPosition -= 10* Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+
+            if(Keyboard.GetState().IsKeyDown(Keys.Space))
+                scale= MathF.Cos(Convert.ToSingle(gameTime.TotalGameTime.TotalSeconds))+2f;
+
+            Rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
             Quaternion quaternion;
-            var axis= new Vector3(0.5f,0.5f,0.5f);
+            var axis= new Vector3(1f,1f,0f);
             axis.Normalize(); // siempre hay que normalizar el vector que le pasamos a quaternion
-            quaternion=Quaternion.CreateFromAxisAngle(axis,Rotation);
+            quaternion=Quaternion.CreateFromAxisAngle(axis,Rotation);     //Le indico el vector eje sobre el que va a girar y el angulo de giro (en este caso incremental)
             
-            World = Matrix.CreateTranslation(0f,yPosition,0f);
+            World = 
+                Matrix.CreateTranslation(xPosition,yPosition,0f)
+                * Matrix.CreateFromQuaternion(quaternion)
+                * Matrix.CreateScale(scale);    //Indico el factor de escala. 1 es el tamaño original
+
             
 
             base.Update(gameTime);
