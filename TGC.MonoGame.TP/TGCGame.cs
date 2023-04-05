@@ -106,6 +106,9 @@ namespace TGC.MonoGame.TP
         ///     Se debe escribir toda la logica de computo del modelo, asi como tambien verificar entradas del usuario y reacciones
         ///     ante ellas.
         /// </summary>
+
+         float yPosition=0f;
+
         protected override void Update(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de actualizacion del juego.
@@ -117,10 +120,21 @@ namespace TGC.MonoGame.TP
                 Exit();
             }
 
+            else if(Keyboard.GetState().IsKeyDown(Keys.W))
+                yPosition = MathF.Cos(Convert.ToSingle(gameTime.TotalSeconds.TotalSeconds));
             // Basado en el tiempo que paso se va generando una rotacion.
-            Rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
             //gameTime.ElapsedGameTime.TotalSeconds: tiempo en seg que paso desde que se inicio la app
+            if(Keyboard.GetState().IsKeyDown(Keys.S))
+                Rotation -= 5* Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
+
+            Quaternion quaternion;
+            var axis= new Vector3(0.5f,0.5f,0.5f);
+            axis.Normalize(); // siempre hay que normalizar el vector que le pasamos a quaternion
+            quaternion=Quaternion.CreateFromAxisAngle(axis,Rotation);
+            
+            World = Matrix.CreateTranslation(0f,yPosition,0f);
+            
 
             base.Update(gameTime);
         }
@@ -142,7 +156,7 @@ namespace TGC.MonoGame.TP
 
             foreach (var mesh in Model.Meshes)
             {
-                World = mesh.ParentBone.Transform * rotationMatrix;
+                //World = mesh.ParentBone.Transform * rotationMatrix;
                 Effect.Parameters["World"].SetValue(World);
                 mesh.Draw();
             }
