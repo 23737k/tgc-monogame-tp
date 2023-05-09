@@ -31,17 +31,14 @@ struct VertexShaderOutput
 	float4 ProjectedPosition : TEXCOORD1;  //Agrego esta variable que guarda lo mismo que Position, porque al usar esta ultima me tira error. Creo que esta protegida y no se puede usar
 };
 
-
-
-/*
-
-Ejercicio 3
+//Declaro las variables uniformes 
 uniform float Max;
 uniform float Min;
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
 
+// aca pregunto si el valor de x se pasa del maximo. si es asi entonces lo comprimo hasta el max. Analogo con el min
 	if(input.Position.x >Max)
 		input.Position.x = Max;
 	if(input.Position.x <Min)
@@ -61,7 +58,6 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	return output;
 }
 
-*/
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {	  

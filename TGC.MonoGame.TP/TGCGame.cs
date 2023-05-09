@@ -140,12 +140,9 @@ namespace TGC.MonoGame.TP
             Effect.Parameters["Projection"].SetValue(Projection);
            //Effect.Parameters["DiffuseColor"].SetValue(Color.DarkBlue.ToVector3());  esta linea del orto se comenta porque no se usa el DiffuseColor
             Effect.Parameters["World"].SetValue(World);
-            
-            /*
-            Ejercicio 3
+            //Paso por parametro el Max y Min
             Effect.Parameters["Max"].SetValue(30);
             Effect.Parameters["Min"].SetValue(-30);
-            */
             //var rotationMatrix = Matrix.CreateRotationY(Rotation);
 
             foreach (var mesh in Model.Meshes)
