@@ -31,6 +31,7 @@ namespace TGC.MonoGame.TP
             Content.RootDirectory = "Content";
             // Hace que el mouse sea visible.
             IsMouseVisible = true;
+
         }
 
         private GraphicsDeviceManager Graphics { get; }
@@ -57,6 +58,11 @@ namespace TGC.MonoGame.TP
             rasterizerState.CullMode = CullMode.None;
             GraphicsDevice.RasterizerState = rasterizerState;
             // Seria hasta aca.
+
+            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 100;
+            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 100;
+            Graphics.ApplyChanges();
+
 
             // Configuramos nuestras matrices de la escena.
             World = Matrix.Identity;
@@ -127,18 +133,19 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logia de renderizado del juego.
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.
             Effect.Parameters["View"].SetValue(View);
             Effect.Parameters["Projection"].SetValue(Projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.DarkBlue.ToVector3());
-            var rotationMatrix = Matrix.CreateRotationY(Rotation);
+           //Effect.Parameters["DiffuseColor"].SetValue(Color.DarkBlue.ToVector3());  esta linea del orto se comenta porque no se usa el DiffuseColor
+            Effect.Parameters["World"].SetValue(World);
+           // var rotationMatrix = Matrix.Identity;
 
             foreach (var mesh in Model.Meshes)
             {
-                World = mesh.ParentBone.Transform * rotationMatrix;
-                Effect.Parameters["World"].SetValue(World);
+                //World = mesh.ParentBone.Transform * rotationMatrix;
+                //Effect.Parameters["World"].SetValue(World);
                 mesh.Draw();
             }
         }

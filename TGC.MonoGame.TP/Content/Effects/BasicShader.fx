@@ -17,9 +17,11 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 
-float3 DiffuseColor;
+//float3 DiffuseColor;
 
 float Time = 0;
+//float Min;
+//float Max;
 
 struct VertexShaderInput
 {
@@ -29,7 +31,9 @@ struct VertexShaderInput
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
+	float4 LocalPosition : TEXCOORD0; //agrego LocalPosition que guarda la posicion en local de cada vertice. Le puse TEXCOORD0 de semantics porque con POSITION0 no funca
 };
+
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
@@ -41,14 +45,18 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     float4 viewPosition = mul(worldPosition, View);	
 	// View space to Projection space
     output.Position = mul(viewPosition, Projection);
-
+	output.LocalPosition = input.Position; //Guardo la posicion local en el output
     return output;
 }
 
+
 float4 MainPS(VertexShaderOutput input) : COLOR
-{
-    return float4(DiffuseColor, 1.0);
+{	
+	float1 colorValue = step(input.LocalPosition.y,40.0); //pregunto si la pos local en y es menor a 40. Si lo es devuelve 1. Si no lo es devuelve 0
+
+    return float4(colorValue, colorValue, colorValue, 1.0); //devuelvo el color
 }
+
 
 technique BasicColorDrawing
 {
