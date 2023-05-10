@@ -42,6 +42,7 @@ namespace TGC.MonoGame.TP
         private Matrix World { get; set; }
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
+        private Texture2D Texture {get; set;}
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -65,8 +66,8 @@ namespace TGC.MonoGame.TP
 
 
             // Configuramos nuestras matrices de la escena.
-            World = Matrix.Identity;
-            View = Matrix.CreateLookAt(Vector3.UnitZ * 150, Vector3.Zero, Vector3.Up);
+            World = Matrix.CreateTranslation(0,-40,0);
+            View = Matrix.CreateLookAt(Vector3.UnitZ*150, Vector3.Zero, Vector3.Up);
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
@@ -88,8 +89,10 @@ namespace TGC.MonoGame.TP
 
             // Cargo un efecto basico propio declarado en el Content pipeline.
             // En el juego no pueden usar BasicEffect de MG, deben usar siempre efectos propios.
-            Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
-
+            Effect = Content.Load<Effect>(ContentFolderEffects + "Shader-punto1");
+            
+            Texture = Content.Load<Texture2D>(ContentFolderTextures + "ground");
+            Effect.Parameters["ModelTexture"]?.SetValue(Texture);
             // Asigno el efecto que cargue a cada parte del mesh.
             // Un modelo puede tener mas de 1 mesh internamente.
             foreach (var mesh in Model.Meshes)
@@ -140,9 +143,17 @@ namespace TGC.MonoGame.TP
             Effect.Parameters["Projection"].SetValue(Projection);
            //Effect.Parameters["DiffuseColor"].SetValue(Color.DarkBlue.ToVector3());  esta linea del orto se comenta porque no se usa el DiffuseColor
             Effect.Parameters["World"].SetValue(World);
+            //Effect.Parameters["Time"]?.SetValue(Convert.ToSingle(gameTime.TotalGameTime.TotalSeconds*0.2));
+            //Effect.Parameters["Plano"].SetValue(new Vector4(-1,-1,-1,4f));
+
+
+            /*
+            //Punto 3
             //Paso por parametro el Max y Min
-            Effect.Parameters["Max"].SetValue(30);
-            Effect.Parameters["Min"].SetValue(-30);
+            Effect.Parameters["Max"].SetValue(20);
+            Effect.Parameters["Min"].SetValue(-20);
+            */
+
             //var rotationMatrix = Matrix.CreateRotationY(Rotation);
 
             foreach (var mesh in Model.Meshes)
