@@ -11,7 +11,6 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 
-//ESTE SHADER ES DE PLANTILLA. CONTIENE LO BASICO PARA CUALQUIER SHADER. SOLO DEVUELVE EL MODELO EN ESPACIO MUNDO CON UN COLOR AZUL.
 
 
 
@@ -60,6 +59,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 {	 
     float3 textureColor = tex2D(textureSampler, input.TextureCoordinate).rgb; 
 	//El ejercicio pedia que sea < 0.4 en el canal rojo. Pero lo subi a 0.7 para esta textura en particular para que sea mas notorio el efecto
+	//clip: si el valor dentro es menor que 0 (negativo) => descarta ese fragmento (no lo dibuja)
     clip(textureColor.r < 0.7?-1:1);
 	return float4(textureColor,1); 
 }

@@ -60,11 +60,11 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {	 
-   	//Ver como implementarlo con clip()
     float3 textureColor = tex2D(textureSampler, input.TextureCoordinate).rgb;
 	//clip: si el valor dentro es menor que 0 (negativo) => descarta ese fragmento (no lo dibuja)
     clip(textureColor.g - 0.5);	
-    clip(textureColor.b * 0.5);
+    clip(textureColor.b - 0.5);
+	//Calcula la distancia del vertice en World al centro de la esfera. Le resta el radio. Si da negativo, es porque esta dentro de la esfera y se descarta el fragmento
     clip(distance(input.WorldPosition.xyz,float3(20.0, 20.0, 0.0))-20);
 	return float4(textureColor,1);
 }
