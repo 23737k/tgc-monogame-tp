@@ -10,7 +10,7 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
-uniform float Time;
+
 //ESTE SHADER ES DE PLANTILLA. CONTIENE LO BASICO PARA CUALQUIER SHADER. SOLO DEVUELVE EL MODELO EN ESPACIO MUNDO CON UN COLOR AZUL.
 
 
@@ -38,20 +38,8 @@ struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
 	float2 TextureCoordinate : TEXCOORD0;
-    float4 Color : TEXCOORD1;
 };
 
-float3 random3(float3 c)
-{
-    float j = 4096.0 * sin(dot(c, float3(17.0, 59.4, 15.0)));
-    float3 r;
-    r.z = frac(512.0 * j);
-    j *= .125;
-    r.x = frac(512.0 * j);
-    j *= .125;
-    r.y = frac(512.0 * j);
-    return r;
-}
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
@@ -62,16 +50,17 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     // World space to View space
     float4 viewPosition = mul(worldPosition, View);	
 	// View space to Projection space
-    float4 position = mul(viewPosition, Projection);
-    output.Color = float4 (random3(position.xyz * Time),1);
-    output.Position = position;
-
+    output.Position = mul(viewPosition, Projection);
+	//propago las texturas
+	//output.TextureCoordinate = input.TextureCoordinate;
+	//propago la posicion en World de los vertices
+	//output.WorldPosition = worldPosition;
 	return output;
 }
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {	 
-    return input.Color; 
+    return float4(0,0,1,1); 
 }
 
 

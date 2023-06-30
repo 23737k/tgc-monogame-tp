@@ -11,10 +11,11 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 uniform float Time;
+
 //ESTE SHADER ES DE PLANTILLA. CONTIENE LO BASICO PARA CUALQUIER SHADER. SOLO DEVUELVE EL MODELO EN ESPACIO MUNDO CON UN COLOR AZUL.
 
 
-/*
+
 //Defino la textura
 
 uniform texture ModelTexture;
@@ -26,7 +27,7 @@ sampler2D textureSampler = sampler_state
     AddressU = Clamp;
     AddressV = Clamp;
 };
-*/
+
 
 struct VertexShaderInput
 {
@@ -38,7 +39,6 @@ struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
 	float2 TextureCoordinate : TEXCOORD0;
-    float4 Color : TEXCOORD1;
 };
 
 float3 random3(float3 c)
@@ -53,25 +53,42 @@ float3 random3(float3 c)
     return r;
 }
 
+
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     // Clear the output
 	VertexShaderOutput output = (VertexShaderOutput)0;
+    float4 position = input.Position;
     // Model space to World space
-    float4 worldPosition = mul(input.Position, World);
+    float4 worldPosition = mul(position, World);
+
+    //ACA UTILIZO LA FUNCION RANDOM PARA QUE ME DEVUELVA UN NUMERO ALEATORIO. LO MULTIPLICO POR Time PARA QUE DEPENDA DEL TIEMPO, YA QUE AL PARECER AUNQUE EL SHADER SE EJECUTE EN 
+    //CADA Draw() Y random3 DEVUELVA UN NUMERO ALEATORIO CADA VEZ, EL MODELO SE VE QUIETO. AL PARECER NO SE VUELVE A EJECUTAR random3 A MENOS QUE SE LO MULTIPLIQUE POR UNA VARIABLE
+    //CAMBIANTE COMO Time. 
+    //CON ESTE float3 ALEATORIO, OBTENGO SUS COMPONENTES XZ (YA QUE SOLO ME PIDEN QUE VARIE LA POSICION DE LOS VERTICES EN ESTOS EJES), Y EN LUGAR DE ASIGNARLOS COMO LOS NUEVOS
+    //x z DEL VERTICE, LO UTILIZO COMO UN OFFSET DEL DESPLAZAMIENTO. NO FUNCIONA CAMBIANDO LOS VALORES DE X Z DEL VERTICE POR LOS VALORES ARROJADOS POR random3 YA 
+    //QUE AL PARECER ESTA FUNCION ARROJA VALORES MUY PEQUEÑOS, POR LO TANTO CUANDO SE INTENTA HACER LO ANTES MENCIONADO : SE VE UNA LINEA, SI SE MODIFICAN X Z (DOS EJES), 
+    //SE VE EL MODELO ACHATADO, SI SE MODIFICA X o Z (1 EJE), O SE VE UN PUNTO SI SE INTENTA MODIFICAR X Y Z (LOS 3 EJES). 
+    //ES POR ESO QUE A SUS COMPONENTES EN X Z LES SUMO LO DEVUELTO POR random3.
+
+    float2 offset= random3(worldPosition.xyz * Time).xz;
+    worldPosition.xz += offset;
     // World space to View space
     float4 viewPosition = mul(worldPosition, View);	
 	// View space to Projection space
-    float4 position = mul(viewPosition, Projection);
-    output.Color = float4 (random3(position.xyz * Time),1);
-    output.Position = position;
-
+    output.Position = mul(viewPosition, Projection);
+	//propago las texturas
+	output.TextureCoordinate = input.TextureCoordinate;
+	//propago la posicion en World de los vertices
+	//output.WorldPosition = worldPosition;
 	return output;
 }
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {	 
-    return input.Color; 
+    //Multiplicacion de colores: da una apariencia más oscurecida o atenuada del color original. Se utiliza para hacer mezclas o atenuaciones de colores
+    //Suma de colores: da una apariencia más brillante o intensa. Esto puede resaltar o intensificar (brillante) el color original.
+    return float4(tex2D(textureSampler, input.TextureCoordinate).rgb,1) * float4(0,0.8,0,1); 
 }
 
 

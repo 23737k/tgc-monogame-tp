@@ -57,6 +57,7 @@ namespace TGC.MonoGame.TP
             // Una vez que empiecen su juego, esto no es mas necesario y lo pueden sacar.
             var rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
             GraphicsDevice.RasterizerState = rasterizerState;
             // Seria hasta aca.
 
@@ -64,12 +65,15 @@ namespace TGC.MonoGame.TP
             Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 100;
             Graphics.ApplyChanges();
 
+            // x + : derecha
+            // z + : saliente a la pantalla
+            // y + : arriba
 
             // Configuramos nuestras matrices de la escena.
-            World = Matrix.CreateTranslation(0,-40,0);
-            View = Matrix.CreateLookAt(Vector3.UnitZ*150, Vector3.Zero, Vector3.Up);
+            World = Matrix.CreateTranslation(0,0,0);
+            View = Matrix.CreateLookAt(new Vector3(-100,100,200), Vector3.Zero, Vector3.Up);
             Projection =
-                Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
+                Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 500);
 
             base.Initialize();
         }
@@ -84,11 +88,11 @@ namespace TGC.MonoGame.TP
             
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Model = Content.Load<Model>(ContentFolder3D + "tgc-logo/tgc-logo");
+            Model = Content.Load<Model>(ContentFolder3D + "tgcito-classic/tgcito-classic");
 
-            Effect = Content.Load<Effect>(ContentFolderEffects + "Ejercicios-shaders/Shaders-nivel2/Ejercicio2");
+            Effect = Content.Load<Effect>(ContentFolderEffects + "Ejercicios-shaders/Shaders-nivel2/Ejercicio3");
             
-            Texture = Content.Load<Texture2D>(ContentFolderTextures + "ground");
+            //Texture = Content.Load<Texture2D>(ContentFolderTextures + "ground");
             Effect.Parameters["ModelTexture"]?.SetValue(Texture);
             foreach (var mesh in Model.Meshes)
             {
