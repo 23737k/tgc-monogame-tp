@@ -19,53 +19,65 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BasicShader.fx
 
-#begin Effects/Shader-plantilla.fx
+#begin Effects/Ejercicios-Shaders/Shader-plantilla.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-plantilla.fx
+/build:Effects/Ejercicios-Shaders/Shader-plantilla.fx
 
-#begin Effects/Shader-punto1.fx
+#begin Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio1.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-punto1.fx
+/build:Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio1.fx
 
-#begin Effects/Shader-punto2.fx
+#begin Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio2.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-punto2.fx
+/build:Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio2.fx
 
-#begin Effects/Shader-punto3.fx
+#begin Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio3.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-punto3.fx
+/build:Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio3.fx
 
-#begin Effects/Shader-punto4.fx
+#begin Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio4.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-punto4.fx
+/build:Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio4.fx
 
-#begin Effects/Shader-punto5.fx
+#begin Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio5.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-punto5.fx
+/build:Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio5.fx
 
-#begin Effects/Shader-punto6.fx
+#begin Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio6.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-punto6.fx
+/build:Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio6.fx
 
-#begin Effects/Shader-punto7.fx
+#begin Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio7.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Effects/Shader-punto7.fx
+/build:Effects/Ejercicios-Shaders/Shaders-nivel1/Ejercicio7.fx
+
+#begin Effects/Ejercicios-Shaders/Shaders-nivel2/Ejercicio1.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Ejercicios-Shaders/Shaders-nivel2/Ejercicio1.fx
+
+#begin Effects/Ejercicios-Shaders/Shaders-nivel2/Ejercicio2.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Ejercicios-Shaders/Shaders-nivel2/Ejercicio2.fx
 
 #begin Models/tgc-logo/tgc-logo.fbx
 /importer:FbxImporter

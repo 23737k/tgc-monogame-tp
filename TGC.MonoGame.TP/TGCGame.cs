@@ -81,23 +81,17 @@ namespace TGC.MonoGame.TP
         /// </summary>
         protected override void LoadContent()
         {
-            // Aca es donde deberiamos cargar todos los contenido necesarios antes de iniciar el juego.
+            
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Cargo el modelo del logo.
             Model = Content.Load<Model>(ContentFolder3D + "tgc-logo/tgc-logo");
 
-            // Cargo un efecto basico propio declarado en el Content pipeline.
-            // En el juego no pueden usar BasicEffect de MG, deben usar siempre efectos propios.
-            Effect = Content.Load<Effect>(ContentFolderEffects + "Shader-punto1");
+            Effect = Content.Load<Effect>(ContentFolderEffects + "Ejercicios-shaders/Shaders-nivel2/Ejercicio2");
             
             Texture = Content.Load<Texture2D>(ContentFolderTextures + "ground");
             Effect.Parameters["ModelTexture"]?.SetValue(Texture);
-            // Asigno el efecto que cargue a cada parte del mesh.
-            // Un modelo puede tener mas de 1 mesh internamente.
             foreach (var mesh in Model.Meshes)
             {
-                // Un mesh puede tener mas de 1 mesh part (cada 1 puede tener su propio efecto).
                 foreach (var meshPart in mesh.MeshParts)
                 {
                     meshPart.Effect = Effect;
@@ -136,14 +130,13 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logia de renderizado del juego.
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+             GraphicsDevice.Clear(Color.CornflowerBlue);
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.
             Effect.Parameters["View"].SetValue(View);
             Effect.Parameters["Projection"].SetValue(Projection);
            //Effect.Parameters["DiffuseColor"].SetValue(Color.DarkBlue.ToVector3());  esta linea del orto se comenta porque no se usa el DiffuseColor
             Effect.Parameters["World"].SetValue(World);
-            //Effect.Parameters["Time"]?.SetValue(Convert.ToSingle(gameTime.TotalGameTime.TotalSeconds*0.2));
+            Effect.Parameters["Time"]?.SetValue(Convert.ToSingle(gameTime.TotalGameTime.TotalSeconds));
             //Effect.Parameters["Plano"].SetValue(new Vector4(-1,-1,-1,4f));
 
 
