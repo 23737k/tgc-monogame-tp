@@ -11,6 +11,7 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 uniform float Time;
+
 //ESTE SHADER ES DE PLANTILLA. CONTIENE LO BASICO PARA CUALQUIER SHADER. SOLO DEVUELVE EL MODELO EN ESPACIO MUNDO CON UN COLOR AZUL.
 
 
@@ -38,27 +39,24 @@ struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
 	float2 TextureCoordinate : TEXCOORD0;
-	float4 WorldPosition : TEXCOORD1;
 };
 
-float3 random3(float3 c)
-{
-    float j = 4096.0 * sin(dot(c, float3(17.0, 59.4, 15.0)));
-    float3 r;
-    r.z = frac(512.0 * j);
-    j *= .125;
-    r.x = frac(512.0 * j);
-    j *= .125;
-    r.y = frac(512.0 * j);
-    return r;
-}
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     // Clear the output
 	VertexShaderOutput output = (VertexShaderOutput)0;
+
+	float4 localPosition = input.Position;
+	float sinAngle, cosAngle, rotatedX, rotatedZ,angle;
+	angle = Time*localPosition.y*0.1;
+	sincos(angle, sinAngle, cosAngle);
+	rotatedX = localPosition.x * cosAngle - localPosition.z * sinAngle;
+    rotatedZ = localPosition.x * sinAngle + localPosition.z * cosAngle;
+
+	localPosition.xz = float2(rotatedX,rotatedZ);
     // Model space to World space
-    float4 worldPosition = mul(input.Position, World);
+    float4 worldPosition = mul(localPosition, World);
     // World space to View space
     float4 viewPosition = mul(worldPosition, View);	
 	// View space to Projection space
@@ -66,17 +64,15 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	//propago las texturas
 	output.TextureCoordinate = input.TextureCoordinate;
 	//propago la posicion en World de los vertices
-	output.WorldPosition = worldPosition;
+	//output.WorldPosition = worldPosition;
 	return output;
 }
+//CUIDADO CON EL NOMBRE DE LAS VARIABLES. NUNCA PONER EL NOMBRE texture EN EL PS
 
 float4 MainPS(VertexShaderOutput input) : COLOR
-{	 
-	float3 random = random3(input.WorldPosition.xyz);
-	float4 lineColor = float4(0,0,1,1);
-	if(frac(input.WorldPosition.y)/2!=0)
-		lineColor= float4(1,0,0,1);
-    return tex2D(textureSampler, input.TextureCoordinate).rgba * lineColor; 
+{	
+	float4 finalColor = tex2D(textureSampler, input.TextureCoordinate); 
+    return finalColor; 
 }
 
 

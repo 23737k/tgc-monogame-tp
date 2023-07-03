@@ -57,13 +57,15 @@ namespace TGC.MonoGame.TP
             // Una vez que empiecen su juego, esto no es mas necesario y lo pueden sacar.
             var rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
             GraphicsDevice.RasterizerState = rasterizerState;
-            // Seria hasta aca.
+            
 
+            // Configuro las dimensiones de la pantalla.
             Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 100;
             Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 100;
+            //Graphics.IsFullScreen= true;
             Graphics.ApplyChanges();
+            // Seria hasta aca.
 
             // x + : derecha
             // z + : saliente a la pantalla
@@ -71,7 +73,7 @@ namespace TGC.MonoGame.TP
 
             // Configuramos nuestras matrices de la escena.
             World = Matrix.CreateTranslation(0,0,0);
-            View = Matrix.CreateLookAt(new Vector3(-100,100,200), Vector3.Zero, Vector3.Up);
+            View = Matrix.CreateLookAt(new Vector3(-80,80,150), Vector3.Zero, Vector3.Up);
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 500);
 
@@ -90,7 +92,7 @@ namespace TGC.MonoGame.TP
 
             Model = Content.Load<Model>(ContentFolder3D + "tgcito-classic/tgcito-classic");
 
-            Effect = Content.Load<Effect>(ContentFolderEffects + "Ejercicios-shaders/Shaders-nivel2/Ejercicio3");
+            Effect = Content.Load<Effect>(ContentFolderEffects + "Ejercicios-shaders/Shaders-nivel3/Ejercicio3");
             
             //Texture = Content.Load<Texture2D>(ContentFolderTextures + "ground");
             Effect.Parameters["ModelTexture"]?.SetValue(Texture);
@@ -134,15 +136,17 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logia de renderizado del juego.
-             GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.
             Effect.Parameters["View"].SetValue(View);
             Effect.Parameters["Projection"].SetValue(Projection);
            //Effect.Parameters["DiffuseColor"].SetValue(Color.DarkBlue.ToVector3());  esta linea del orto se comenta porque no se usa el DiffuseColor
             Effect.Parameters["World"].SetValue(World);
             Effect.Parameters["Time"]?.SetValue(Convert.ToSingle(gameTime.TotalGameTime.TotalSeconds));
-            //Effect.Parameters["Plano"].SetValue(new Vector4(-1,-1,-1,4f));
-
+            Effect.Parameters["InverseTransposeWorld"]?.SetValue(Matrix.Transpose(Matrix.Invert(World)));
+            Effect.Parameters["Plane"]?.SetValue(new Vector4(-0.5f,-1,-0,2));
 
             /*
             //Punto 3
@@ -152,15 +156,16 @@ namespace TGC.MonoGame.TP
             */
 
             //var rotationMatrix = Matrix.CreateRotationY(Rotation);
-
+           
             foreach (var mesh in Model.Meshes)
             {
                 //World = mesh.ParentBone.Transform * rotationMatrix;
                 //Effect.Parameters["World"].SetValue(World);
                 mesh.Draw();
             }
+            
         }
-
+       
         /// <summary>
         ///     Libero los recursos que se cargaron en el juego.
         /// </summary>

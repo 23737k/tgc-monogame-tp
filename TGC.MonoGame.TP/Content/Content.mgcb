@@ -91,6 +91,24 @@
 /processorParam:DebugMode=Auto
 /build:Effects/Ejercicios-Shaders/Shaders-nivel2/Ejercicio4.fx
 
+#begin Effects/Ejercicios-Shaders/Shaders-nivel3/Ejercicio1.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Ejercicios-Shaders/Shaders-nivel3/Ejercicio1.fx
+
+#begin Effects/Ejercicios-Shaders/Shaders-nivel3/Ejercicio2.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Ejercicios-Shaders/Shaders-nivel3/Ejercicio2.fx
+
+#begin Effects/Ejercicios-Shaders/Shaders-nivel3/Ejercicio3.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Ejercicios-Shaders/Shaders-nivel3/Ejercicio3.fx
+
 #begin Models/tgc-logo/tgc-logo.fbx
 /importer:FbxImporter
 /processor:ModelProcessor

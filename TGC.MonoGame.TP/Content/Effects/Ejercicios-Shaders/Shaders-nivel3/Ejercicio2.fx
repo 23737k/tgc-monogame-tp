@@ -10,7 +10,8 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
-uniform float Time;
+uniform float4 Plane;
+
 //ESTE SHADER ES DE PLANTILLA. CONTIENE LO BASICO PARA CUALQUIER SHADER. SOLO DEVUELVE EL MODELO EN ESPACIO MUNDO CON UN COLOR AZUL.
 
 
@@ -41,17 +42,6 @@ struct VertexShaderOutput
 	float4 WorldPosition : TEXCOORD1;
 };
 
-float3 random3(float3 c)
-{
-    float j = 4096.0 * sin(dot(c, float3(17.0, 59.4, 15.0)));
-    float3 r;
-    r.z = frac(512.0 * j);
-    j *= .125;
-    r.x = frac(512.0 * j);
-    j *= .125;
-    r.y = frac(512.0 * j);
-    return r;
-}
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
@@ -72,11 +62,17 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {	 
-	float3 random = random3(input.WorldPosition.xyz);
-	float4 lineColor = float4(0,0,1,1);
-	if(frac(input.WorldPosition.y)/2!=0)
-		lineColor= float4(1,0,0,1);
-    return tex2D(textureSampler, input.TextureCoordinate).rgba * lineColor; 
+	//dot: retorna el producto escalar de dos vectores. 
+    float dist = dot(Plane.xyz, input.WorldPosition.xyz) - Plane.w; // Calcular distancia del fragmento al plano
+    if (dist < 0.0) // Si el fragmento está del lado opuesto al plano
+        discard; // Descartar el fragmento
+	float4 finalColor = tex2D(textureSampler,input.TextureCoordinate);
+	
+	float4 green = float4(0.0,1.0,0.0,1.0);
+	float factor = smoothstep(0.0,5.0, abs(dist));
+	float4 color = lerp(green, finalColor, factor);
+
+    return color; 
 }
 
 

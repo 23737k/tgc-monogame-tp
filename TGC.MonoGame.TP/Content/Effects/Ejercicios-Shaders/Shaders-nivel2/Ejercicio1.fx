@@ -19,7 +19,7 @@ uniform float Time;
 //ESTE SHADER ES DE PLANTILLA. CONTIENE LO BASICO PARA CUALQUIER SHADER. SOLO DEVUELVE EL MODELO EN ESPACIO MUNDO CON UN COLOR AZUL.
 
 
-/*
+
 //Defino la textura
 
 uniform texture ModelTexture;
@@ -31,7 +31,7 @@ sampler2D textureSampler = sampler_state
     AddressU = Clamp;
     AddressV = Clamp;
 };
-*/
+
 
 struct VertexShaderInput
 {
@@ -67,7 +67,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     
 	//propago las texturas
-	//output.TextureCoordinate = input.TextureCoordinate;
+	output.TextureCoordinate = input.TextureCoordinate;
 	//propago la posicion en World de los vertices
 	//output.WorldPosition = worldPosition;
 
@@ -77,7 +77,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {	 
-    return float4(0,0,1,1); 
+    return tex2D(textureSampler,input.TextureCoordinate).rgba; 
 }
 
 
