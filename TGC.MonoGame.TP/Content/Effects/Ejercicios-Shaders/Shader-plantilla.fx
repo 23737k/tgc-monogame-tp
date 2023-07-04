@@ -85,7 +85,16 @@ technique BasicColorDrawing
 // length: 	RETORNA LA LONGITUD DEL VECTOR
 //  distance: RETORNA LA DISTANCIA ENTRE DOS VECTORES
 //   ceil(x) y floor(x):	 Retorna el entero mas pequeño que es mayor o igual a x. Retorna el entero mas grande que es menor igual a x. AKA: REDONDEA PARA ARRIBA O ABAJO
+//					floor(3.2) devuelve 3.
+//					floor(3.8) devuelve 3.
+
+
 //  pow (X,Y)
 //  clip(float x): DESCARTA EL FRAGMENTO O VERTICE SI x ES MENOR A 0; O SI LA CONDICION DEVUELVE FALSE.
 // discard : DESCARTA EL FRAGMENTO O VERTICE 
 // dot: producto escalar.
+
+
+//PARA PASAR DE UN RANGO A OTRO : valor_transformado = (valor_original - min_original) * (max_nuevo - min_nuevo) / (max_original - min_original) + min_nuevo
+//PARA PASAR DE COORDENADAS [-1,1] VISTA PROYECCION A COORDENADAS DE PANTALLA [0-VIEWPORT.HEIGHT/WIDHT] : 
+// screen.x = viewProjPosition.x * (Width/2) + (Width/2)
